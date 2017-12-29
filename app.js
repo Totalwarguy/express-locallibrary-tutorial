@@ -18,7 +18,8 @@ var app = express();
 
 //Set up mongoose connection
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb://danh:danh1234@ds111124.mlab.com:11124/danh_local_library';
+var mongoDB = process.env.MONGODB_URI 
+                || 'mongodb://danh:danh1234@ds111124.mlab.com:11124/danh_local_library';
 mongoose.connect(mongoDB, {
   useMongoClient: true
 });
