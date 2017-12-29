@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var compression = require('compression');
 var helmet = require('helmet');
 
+var config = require('./config/db');
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -19,7 +21,8 @@ var app = express();
 //Set up mongoose connection
 var mongoose = require('mongoose');
 var mongoDB = process.env.MONGODB_URI 
-                || 'mongodb://danh:danh1234@ds111124.mlab.com:11124/danh_local_library';
+                || config.connection_string;
+console.log('Using config connection string...');
 mongoose.connect(mongoDB, {
   useMongoClient: true
 });
