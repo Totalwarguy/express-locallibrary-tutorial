@@ -7,7 +7,14 @@ var bodyParser = require('body-parser');
 var compression = require('compression');
 var helmet = require('helmet');
 
-var config = require('./config/db');
+var config;
+try {
+  config = require('./config/db');
+}
+catch (ex) {
+  console.error('app.startup', ex.message);
+}
+
 
 
 var index = require('./routes/index');
