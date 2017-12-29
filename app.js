@@ -19,7 +19,8 @@ var app = express();
 //Set up mongoose connection
 var mongoose = require('mongoose');
 var mongoDB = process.env.MONGODB_URI 
-                || 'mongodb://danh:danh1234@ds111124.mlab.com:11124/danh_local_library';
+                || 'mongodb://prod:prod12345@ds133017.mlab.com:33017/prod-express-locallibrary-tutorial';
+// 'mongodb://danh:danh1234@ds111124.mlab.com:11124/danh_local_library';
 mongoose.connect(mongoDB, {
   useMongoClient: true
 });

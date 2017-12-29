@@ -64,7 +64,7 @@ exports.bookinstance_detail = function(req, res, next) {
 				next(this.notfounderr);
 			}
 			
-			res.render('bookinstance_detail', {title: 'Book Instance', bookinstance: results.bookinstance, statuslist: statuses});
+			res.render('bookinstance_detail', {title: 'Book Instance', bookinstance: results.bookinstance, status_list: status_list});
 
 		}); 
 
