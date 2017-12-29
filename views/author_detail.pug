@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 #{author.naturalname}
+  p #{author.lifespan}
+
+  div(style='margin-left:20px;margin-top:20px')
+    h4 Books by #{author.naturalname}
+    
+    dl
+    each val in authors_books
+      hr
+      dt #[strong Title:] 
+        a(href=val.url) #{val.title} 
+      dd
+        p #[strong Summary:] #{val.summary}
+ 
+    else
+      p This author has not written any books.
+
+  hr
+
+  form(method='GET' action=deleteurl)
+      button.btn.btn-primary(type='submit') Delete
