@@ -10,6 +10,7 @@ var book_instance_controller = require('../controllers/bookinstanceController');
 
 /// BOOK ROUTES ///
 router.all("/*", function(req, res, next) {
+	console.log('req.app.get(\'env\'): ' + req.app.get('env'));
 	debug(req);
 	next();
 })

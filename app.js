@@ -12,7 +12,7 @@ try {
   config = require('./config/db');
 }
 catch (ex) {
-  console.error('app.startup', ex.message);
+  console.error('app startup', 'No local config/db.js found');
 }
 
 
@@ -29,7 +29,7 @@ var app = express();
 var mongoose = require('mongoose');
 var mongoDB = process.env.MONGODB_URI 
                 || config.connection_string;
-console.log('Using config connection string...');
+
 mongoose.connect(mongoDB, {
   useMongoClient: true
 });
