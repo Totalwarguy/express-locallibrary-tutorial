@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var debug = require('debug')('all');
+var debug = require('debug')('catalog');
 
 // Require controller modules
 var book_controller = require('../controllers/bookController');
@@ -10,7 +10,7 @@ var book_instance_controller = require('../controllers/bookinstanceController');
 
 /// BOOK ROUTES ///
 router.all("/*", function(req, res, next) {
-	debug('hey-yo');
+	debug(req);
 	next();
 })
 

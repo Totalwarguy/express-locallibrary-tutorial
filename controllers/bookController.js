@@ -37,7 +37,7 @@ exports.index = function(req, res) {
 			Genre.count(callback);
 		},
 	}, function(err, results) {
-		console.log(results);
+		//console.log(results);
 		res.render('index', {
 			title: 'Local Library Home',
 			error: err,
