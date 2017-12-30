@@ -108,7 +108,7 @@ exports.bookinstance_create_post = [
 			Book.find({},'title')
 			.exec(function(err, books) {
 				if (err) { return next(err); }
-				res.render('bookinstance_form', {title: 'Book Instance Create', errors: errors.array(), book_list: books, selected_book: bookinstance.book._id, bookinstance: bookinstance, status_list: status_list, selected_status: bookinstance.status});
+				res.render('bookinstance_form', {title: 'Create Book Instance', errors: errors.array(), book_list: books, selected_book: bookinstance.book._id, bookinstance: bookinstance, status_list: status_list, selected_status: bookinstance.status});
 			});
 			return;
 		} else {
@@ -123,13 +123,49 @@ exports.bookinstance_create_post = [
 ]
 
 // Display BookInstance delete form on GET
-exports.bookinstance_delete_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: BookInstance delete GET');
+exports.bookinstance_delete_get = function(req, res, next) {
+    async.parallel({
+    	bookinstance: function(callback) {
+    		BookInstance.findById(req.params.id)
+    		.populate('book')
+    		.exec(callback);
+    	}
+    }, function(err, results) {
+    	if (err) { return next(err); }
+
+    	if (results.bookinstance == null) {
+    		res.redirect('/catalog/bookinstances');
+    	}
+
+    	res.render('bookinstance_delete', {title: 'Delete Book Instance', bookinstance: results.bookinstance});
+
+    });
 };
 
 // Handle BookInstance delete on POST
-exports.bookinstance_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: BookInstance delete POST');
+exports.bookinstance_delete_post = function(req, res, next) {
+    const bookinstances_url = '/catalog/bookinstances';
+	async.parallel({
+		bookinstance: function(callback) {
+			BookInstance.findById(req.body.bookinstanceid)
+			.exec(callback);
+		}
+	}, function(err, results) {
+		if (err) { return next(err); }
+
+		if (results.bookinstance == null) {
+			res.redirect(bookinstances_url);
+			return;
+		} else {
+			BookInstance.findByIdAndRemove(req.body.bookinstanceid, function(err) {
+				if (err) { return next(err); }
+
+				res.redirect(bookinstances_url);
+			});
+		}
+
+	});
+
 };
 
 // Display BookInstance update form on GET

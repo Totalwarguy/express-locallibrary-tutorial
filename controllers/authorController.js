@@ -163,7 +163,7 @@ exports.author_delete_post = function(req, res, next) {
     	if (err) { return next(err); }
 
     	if (results.authors_books.length > 0) {
-    		res.redner('author_delete', {title: 'Delete Author', author: results.author, author_books: results.authors_books});
+    		res.render('author_delete', {title: 'Delete Author', author: results.author, author_books: results.authors_books});
     		return;
 
     	} else {
@@ -172,7 +172,7 @@ exports.author_delete_post = function(req, res, next) {
 
     			res.redirect('/catalog/authors');
 
-    		}) 
+    		});
     	}
 
     });
