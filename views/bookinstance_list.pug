@@ -6,30 +6,28 @@ block content
   hr
   h1.text-success Available
   ul
-  each val in bookinstance_list.available
-    li 
-      a(href=val.url) #{val.book.title} : #{val.imprint}
-  else
-    li There are no available books.
+    each val in bookinstance_list.available
+      li 
+        a(href=val.url) #{val.book.title} : #{val.imprint}
+    else
+      li There are no available books.
 
 
   hr
   h1.text-danger Under Maintenance
   ul
-  each val in bookinstance_list.maintenance
-    li 
-      a(href=val.url) #{val.book.title} : #{val.imprint}
-
-  else
-    li There are no books under maintenance.
+    each val in bookinstance_list.maintenance
+      li 
+        a(href=val.url) #{val.book.title} : #{val.imprint}
+    else
+      li There are no books under maintenance.
 
   hr
   h1.text-warning Unavailable
   ul
-  each val in bookinstance_list.unavailable
-    li 
-      a(href=val.url) #{val.book.title} : #{val.imprint} - 
-        span  (Due: #{val.due_back_formatted} )
-
-  else
-    li There are no unavailable books.
+    each val in bookinstance_list.unavailable
+      li 
+        a(href=val.url) #{val.book.title} : #{val.imprint} - 
+          span  (Due: #{val.due_back_formatted} )
+    else
+      li There are no unavailable books.
