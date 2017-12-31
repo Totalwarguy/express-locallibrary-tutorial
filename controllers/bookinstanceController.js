@@ -26,18 +26,36 @@ notfounderr.status = 404;
 exports.bookinstance_list = function(req, res, next) {
     
 	BookInstance.find()
-	  .populate('book')
-	  .sort('{imprint: asc, status: asc}')
-	  .exec(function(err, list_bookinstances) {
-	  	if (err) { return next(err); }
-
-	  	//console.log(list_bookinstances);
-
-	  	res.render('bookinstance_list', {title: 'Book Instance List', bookinstance_list: list_bookinstances});
-	  });
+		.populate('book')
+		.sort('{imprint: asc, status: asc}')
+		.exec(function(err, bookinstance_list) {
+		if (err) { return next(err); }
+			//console.log(list_bookinstances);
+			var categorizedBookList ;
+			categorizedBookList = sortBooks(bookinstance_list);
+			res.render('bookinstance_list', {title: 'Book Instance List', bookinstance_list: {available: categorizedBookList.available, maintenance: categorizedBookList.maintenance, unavailable: categorizedBookList.unavailable}});
+		});
 
 
 };
+
+var sortBooks = function categorizeBooksByStatus (bookinstances) {
+	var booklist = {available: [], maintenance: [], unavailable: []}
+	for (var instance = 0; instance < bookinstances.length; instance++) {
+		var bookinstance = bookinstances[instance];
+		switch (bookinstance.status) {
+			case 'Available':
+				booklist.available.push(bookinstance);
+				break;
+			case 'Maintenance':
+				booklist.maintenance.push(bookinstance);
+				break;
+			default:
+				booklist.unavailable.push(bookinstance);
+		}
+	}
+	return booklist;
+}
 
 // Display detail page for a specific BookInstance
 exports.bookinstance_detail = function(req, res, next) {
@@ -48,13 +66,13 @@ exports.bookinstance_detail = function(req, res, next) {
 		async.parallel({
 			bookinstance: function(callback) {
 				BookInstance.findById(req.params.id)
-				  .populate('book')
-				  .exec(callback);
+				.populate('book')
+				.exec(callback);
 			},
 			book: function(callback) {
 				Book.find()
-				  .populate()
-				  .exec(callback)
+				.populate()
+				.exec(callback)
 			}
 		}
 		, function (err, results) {
@@ -69,7 +87,7 @@ exports.bookinstance_detail = function(req, res, next) {
 		}); 
 
     } else {
-    	next(this.notfounderr);
+		next(this.notfounderr);
     }
 };
 
@@ -77,9 +95,9 @@ exports.bookinstance_detail = function(req, res, next) {
 exports.bookinstance_create_get = function(req, res, next) {
     Book.find({}, 'title')
     .exec(function(err, books) {
-    	if (err) { return next(err); }
+		if (err) { return next(err); }
 
-    	res.render('bookinstance_form', {title: 'Create Book Instance', book_list:books, status_list: status_list});
+		res.render('bookinstance_form', {title: 'Create Book Instance', book_list:books, status_list: status_list});
 
     });
 };
@@ -125,19 +143,19 @@ exports.bookinstance_create_post = [
 // Display BookInstance delete form on GET
 exports.bookinstance_delete_get = function(req, res, next) {
     async.parallel({
-    	bookinstance: function(callback) {
-    		BookInstance.findById(req.params.id)
-    		.populate('book')
-    		.exec(callback);
-    	}
+		bookinstance: function(callback) {
+			BookInstance.findById(req.params.id)
+			.populate('book')
+			.exec(callback);
+		}
     }, function(err, results) {
-    	if (err) { return next(err); }
+		if (err) { return next(err); }
 
-    	if (results.bookinstance == null) {
-    		res.redirect('/catalog/bookinstances');
-    	}
+		if (results.bookinstance == null) {
+			res.redirect('/catalog/bookinstances');
+		}
 
-    	res.render('bookinstance_delete', {title: 'Delete Book Instance', bookinstance: results.bookinstance});
+		res.render('bookinstance_delete', {title: 'Delete Book Instance', bookinstance: results.bookinstance});
 
     });
 };
